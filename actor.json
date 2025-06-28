@@ -1,0 +1,14 @@
+
+{
+  "actorSpecification": 1,
+  "name": "tui-holiday-deals-scraper",
+  "title": "TUI Holiday Deals Scraper",
+  "description": "Scrapes 7-night TUI holiday deals from a given URL using Puppeteer and Crawlee.",
+  "version": "0.1",
+  "dockerfile": "./Dockerfile",
+  "defaultRunOptions": {
+    "build": true,
+    "memoryMbytes": 1024,
+    "timeoutSecs": 300
+  }
+}
