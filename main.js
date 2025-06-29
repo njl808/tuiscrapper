@@ -2,10 +2,13 @@ import { Actor } from 'apify';
 import { PuppeteerCrawler, Dataset, log } from 'crawlee';
 import { buildLoveUrls, handleLoveHolidays } from './src/loveholidays.js';
 
-const DEFAULT_AIRPORTS = ['CWL', 'BRS'];
-const DEFAULT_DURATIONS = [7, 14];
+await Actor.init(); // ✅ MUST come before getInput
+
 const input = (await Actor.getInput()) || {};
 const site = input.site || 'tui';
+
+const DEFAULT_AIRPORTS = ['CWL', 'BRS'];
+const DEFAULT_DURATIONS = [7, 14];
 
 const buildTuiUrls = (airports, durations) => {
     const base = 'https://www.tui.co.uk/destinations/packages';
@@ -31,8 +34,6 @@ const handleTui = async ({ page }) => {
     });
     await Dataset.pushData(results);
 };
-
-await Actor.init();
 
 const crawler = new PuppeteerCrawler({
     async requestHandler(ctx) {
