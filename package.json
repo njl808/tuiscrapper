@@ -1,14 +1,15 @@
-
 {
   "name": "tui-holiday-deals-scraper",
   "version": "0.1.0",
   "description": "Scrapes TUI deals from a URL using Crawlee and Puppeteer.",
-  "main": "src/main.js",
+  "main": "main.js",
   "scripts": {
-    "start": "node src/main.js"
+    "start": "node main.js"
   },
   "dependencies": {
-    "crawlee": "^3.3.1"
+    "crawlee": "^3.3.1",
+    "apify": "^3.4.2",
+    "puppeteer": "^22.7.0"
   },
   "type": "module"
 }

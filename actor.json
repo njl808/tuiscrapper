@@ -1,9 +1,8 @@
-
 {
   "actorSpecification": 1,
   "name": "tui-holiday-deals-scraper",
-  "title": "TUI Holiday Deals Scraper",
-  "description": "Scrapes 7-night TUI holiday deals from a given URL using Puppeteer and Crawlee.",
+  "title": "Holiday Deals Scraper",
+  "description": "Scrapes TUI and Love Holidays for 7- and 14-night deals from Cardiff and Bristol.",
   "version": "0.1",
   "dockerfile": "./Dockerfile",
   "defaultRunOptions": {
