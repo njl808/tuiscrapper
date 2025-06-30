@@ -2,7 +2,7 @@ import { Actor } from 'apify';
 import { PuppeteerCrawler, Dataset, log } from 'crawlee';
 import { buildLoveUrls, handleLoveHolidays } from './src/loveholidays.js';
 
-await Actor.init(); // ✅ MUST come before getInput
+await Actor.init();
 
 const input = (await Actor.getInput()) || {};
 const site = input.site || 'tui';
@@ -23,15 +23,23 @@ const startUrls =
         : buildTuiUrls(DEFAULT_AIRPORTS, DEFAULT_DURATIONS);
 
 const handleTui = async ({ page }) => {
+    await page.waitForSelector('.resultsItem', { timeout: 15000 });
+    await page.waitForTimeout(2000); // Let JS hydrate
+
     const results = await page.evaluate(() => {
         const items = [];
         document.querySelectorAll('.resultsItem').forEach(el => {
             const title = el.querySelector('.item-title')?.innerText || '';
             const price = el.querySelector('.item-price')?.innerText || '';
-            items.push({ title, price });
+            const board = el.querySelector('.board-basis')?.innerText || '';
+            const link = el.querySelector('a[href]')?.href || '';
+            if (title && price) {
+                items.push({ title, board, price, link });
+            }
         });
         return items;
     });
+
     await Dataset.pushData(results);
 };
 
