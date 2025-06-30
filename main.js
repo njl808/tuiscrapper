@@ -1,8 +1,34 @@
-.js
-+6
--0
+import { Actor } from 'apify';
+import { PuppeteerCrawler, Dataset, log } from 'crawlee';
+import { buildLoveUrls, handleLoveHolidays } from './src/loveholidays.js';
 
-@@ -32,30 +32,36 @@ const handleTui = async ({ page }) => {
+await Actor.init();
+
+const input = (await Actor.getInput()) || {};
+const site = input.site || 'tui';
+
+const DEFAULT_AIRPORTS = ['CWL', 'BRS'];
+const DEFAULT_DURATIONS = [7, 14];
+
+const buildTuiUrls = (airports, durations) => {
+    const base = 'https://www.tui.co.uk/destinations/packages';
+    return airports.flatMap(ap =>
+        durations.map(d => `${base}?airports%5B%5D=${ap}&duration=${d}&when=01-07-2025`)
+    );
+};
+
+const startUrls =
+    site === 'loveholidays'
+        ? buildLoveUrls(DEFAULT_AIRPORTS, DEFAULT_DURATIONS)
+        : buildTuiUrls(DEFAULT_AIRPORTS, DEFAULT_DURATIONS);
+
+const handleTui = async ({ page }) => {
+    await page.waitForSelector('.resultsItem', { timeout: 15000 });
+    await page.waitForTimeout(2000); // Let JS hydrate
+
+    const results = await page.evaluate(() => {
+        const items = [];
+        document.querySelectorAll('.resultsItem').forEach(el => {
             const title = el.querySelector('.item-title')?.innerText || '';
             const price = el.querySelector('.item-price')?.innerText || '';
             const board = el.querySelector('.board-basis')?.innerText || '';
